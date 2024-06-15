@@ -13,10 +13,12 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - uses: ./
+        id: generate-default
 
       - run: cargo init --bin .
 
       - uses: ./
+        id: generate-env
         env:
           CARGO_BUILD_TARGET: arm-unknown-linux-gnueabihf
 
@@ -26,3 +28,53 @@ jobs:
           echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
 
       - uses: ./
+        id: generate-config
+
+      - run: |
+          set -euo pipefail
+          jq <<< "${MATRIX_DEFAULT}" > matrix_default.a.json
+          jq <<-JSON > matrix_default.b.json
+            [
+              {
+                "os": "ubuntu-latest",
+                "toolchain": "stable",
+                "target": "x86_64-unknown-linux-gnu",
+                "use-cross": true
+              },
+              {
+                "os": "macos-latest",
+                "toolchain": "stable",
+                "target": "x86_64-apple-darwin",
+                "use-cross": false
+              },
+              {
+                "os": "macos-latest",
+                "toolchain": "stable",
+                "target": "aarch64-apple-darwin",
+                "use-cross": false
+              }
+            ]
+          JSON
+          diff matrix_default.a.json matrix_default.b.json
+
+          jq <<< "${MATRIX_ENV}" > matrix_env.a.json
+          jq <<-JSON | tee matrix_env.b.json > matrix_config.b.json
+            [
+              {
+                "os": "ubuntu-latest",
+                "toolchain": "stable",
+                "target": "arm-unknown-linux-gnueabihf",
+                "use-cross": true
+              }
+            ]
+          JSON
+          diff matrix_env.a.json matrix_env.b.json
+
+          jq <<< "${MATRIX_CONFIG}" > matrix_config.a.json
+          diff matrix_config.a.json matrix_config.b.json
+
+          [[ "${MATRIX_ENV}" == "${MATRIX_CONFIG}" ]]
+        env:
+          MATRIX_DEFAULT: ${{ steps.generate-default.outputs.matrix }}
+          MATRIX_ENV: ${{ steps.generate-env.outputs.matrix }}
+          MATRIX_CONFIG: ${{ steps.generate-config.outputs.matrix }}
