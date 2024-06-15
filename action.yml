@@ -1,0 +1,15 @@
+name: Generate Rust Build Matrix
+description: Generate Rust Build Matrix
+outputs:
+  matrix:
+    description: Build Matrix
+    value: ${{ steps.generate-matrix.outputs.matrix }}
+runs:
+  using: composite
+  steps:
+    - name: Generate matrix
+      id: generate-matrix
+      run: "${GITHUB_ACTION_PATH}/generate-matrix.sh"
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
