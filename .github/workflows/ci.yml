@@ -32,32 +32,32 @@ jobs:
                   "use-cross": false
                 }
               ]
-            - name: env
-              setup: |
-                echo 'CARGO_BUILD_TARGET=arm-unknown-linux-gnueabihf' >> "${GITHUB_ENV}"
-              expected-matrix: |
-                [
-                  {
-                    "os": "ubuntu-latest",
-                    "toolchain": "stable",
-                    "target": "arm-unknown-linux-gnueabihf",
-                    "use-cross": true
-                  }
-                ]
-            - name: config
-              setup: |
-                mkdir .cargo
-                echo '[build]' >> .cargo/config.toml
-                echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
-              expected-matrix: |
-                [
-                  {
-                    "os": "ubuntu-latest",
-                    "toolchain": "stable",
-                    "target": "arm-unknown-linux-gnueabihf",
-                    "use-cross": true
-                  }
-                ]
+          - name: env
+            setup: |
+              echo 'CARGO_BUILD_TARGET=arm-unknown-linux-gnueabihf' >> "${GITHUB_ENV}"
+            expected-matrix: |
+              [
+                {
+                  "os": "ubuntu-latest",
+                  "toolchain": "stable",
+                  "target": "arm-unknown-linux-gnueabihf",
+                  "use-cross": true
+                }
+              ]
+          - name: config
+            setup: |
+              mkdir .cargo
+              echo '[build]' >> .cargo/config.toml
+              echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
+            expected-matrix: |
+              [
+                {
+                  "os": "ubuntu-latest",
+                  "toolchain": "stable",
+                  "target": "arm-unknown-linux-gnueabihf",
+                  "use-cross": true
+                }
+              ]
 
     steps:
       - name: Check out repository
