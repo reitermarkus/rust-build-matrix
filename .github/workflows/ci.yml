@@ -32,6 +32,9 @@ jobs:
 
       - run: |
           set -euo pipefail
+
+          set -x
+
           jq <<< "${MATRIX_DEFAULT}" > matrix_default.a.json
           jq <<-JSON > matrix_default.b.json
             [
