@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-env | sort
+set -x
 
 if ! targets="$(cargo +nightly -Z unstable-options config get build.target --format json 2>/dev/null | jq .build.target)"; then
   targets='["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "aarch64-apple-darwin"]'
