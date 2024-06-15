@@ -69,6 +69,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - run: |
+          set -euo pipefail
+
           cargo init --bin .
 
           ${{ matrix.setup }}
