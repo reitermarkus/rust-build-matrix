@@ -5,6 +5,59 @@ name: CI
 jobs:
   ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: default
+            setup: ''
+            expected-matrix: |
+              [
+                {
+                  "os": "ubuntu-latest",
+                  "toolchain": "stable",
+                  "target": "x86_64-unknown-linux-gnu",
+                  "use-cross": true
+                },
+                {
+                  "os": "macos-latest",
+                  "toolchain": "stable",
+                  "target": "x86_64-apple-darwin",
+                  "use-cross": false
+                },
+                {
+                  "os": "macos-latest",
+                  "toolchain": "stable",
+                  "target": "aarch64-apple-darwin",
+                  "use-cross": false
+                }
+              ]
+            - name: env
+              setup: |
+                echo 'CARGO_BUILD_TARGET=arm-unknown-linux-gnueabihf' >> "${GITHUB_ENV}"
+              expected-matrix: |
+                [
+                  {
+                    "os": "ubuntu-latest",
+                    "toolchain": "stable",
+                    "target": "arm-unknown-linux-gnueabihf",
+                    "use-cross": true
+                  }
+                ]
+            - name: config
+              setup: |
+                mkdir .cargo
+                echo '[build]' >> .cargo/config.toml
+                echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
+              expected-matrix: |
+                [
+                  {
+                    "os": "ubuntu-latest",
+                    "toolchain": "stable",
+                    "target": "arm-unknown-linux-gnueabihf",
+                    "use-cross": true
+                  }
+                ]
+
     steps:
       - name: Check out repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
@@ -12,72 +65,20 @@ jobs:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - uses: ./
-        id: generate-default
-
-      - run: cargo init --bin .
-
-      - uses: ./
-        id: generate-env
-        env:
-          CARGO_BUILD_TARGET: arm-unknown-linux-gnueabihf
-
       - run: |
-          mkdir .cargo
-          echo '[build]' >> .cargo/config.toml
-          echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
+          cargo init --bin .
+
+          ${{ matrix.setup }}
 
       - uses: ./
-        id: generate-config
+        id: generate-matrix
 
       - run: |
           set -euo pipefail
 
-          set -x
-
-          jq <<< "${MATRIX_DEFAULT}" > matrix_default.a.json
-          jq <<-JSON > matrix_default.b.json
-            [
-              {
-                "os": "ubuntu-latest",
-                "toolchain": "stable",
-                "target": "x86_64-unknown-linux-gnu",
-                "use-cross": true
-              },
-              {
-                "os": "macos-latest",
-                "toolchain": "stable",
-                "target": "x86_64-apple-darwin",
-                "use-cross": false
-              },
-              {
-                "os": "macos-latest",
-                "toolchain": "stable",
-                "target": "aarch64-apple-darwin",
-                "use-cross": false
-              }
-            ]
-          JSON
-          diff matrix_default.a.json matrix_default.b.json
-
-          jq <<< "${MATRIX_ENV}" > matrix_env.a.json
-          jq <<-JSON | tee matrix_env.b.json > matrix_config.b.json
-            [
-              {
-                "os": "ubuntu-latest",
-                "toolchain": "stable",
-                "target": "arm-unknown-linux-gnueabihf",
-                "use-cross": true
-              }
-            ]
-          JSON
-          diff matrix_env.a.json matrix_env.b.json
-
-          jq <<< "${MATRIX_CONFIG}" > matrix_config.a.json
-          diff matrix_config.a.json matrix_config.b.json
-
-          [[ "${MATRIX_ENV}" == "${MATRIX_CONFIG}" ]]
+          jq <<< "${expected_matrix}" > expected.json
+          jq <<< "${matrix}" > actual.json
+          diff expected.json actual.json
         env:
-          MATRIX_DEFAULT: ${{ steps.generate-default.outputs.matrix }}
-          MATRIX_ENV: ${{ steps.generate-env.outputs.matrix }}
-          MATRIX_CONFIG: ${{ steps.generate-config.outputs.matrix }}
+          matrix: ${{ steps.generate-matrix.outputs.matrix }}
+          expected_matrix: ${{ matrix.expected-matrix }}
