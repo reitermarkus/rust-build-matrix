@@ -4,6 +4,7 @@ name: CI
 
 jobs:
   ci:
+    name: ci (${{ matrix.name }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
