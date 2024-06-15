@@ -1,9 +1,15 @@
-name: Generate Rust Build Matrix
-description: Generate Rust Build Matrix
+name: Rust Build Matrix
+description: Generate a Rust Build Matrix.
+author: reitermarkus
+branding:
+  icon: list
+  color: green
+
 outputs:
   matrix:
     description: Build Matrix
     value: ${{ steps.generate-matrix.outputs.matrix }}
+
 runs:
   using: composite
   steps:
