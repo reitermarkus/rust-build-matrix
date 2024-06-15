@@ -15,7 +15,8 @@ runs:
   steps:
     - name: Generate matrix
       id: generate-matrix
-      run: "${GITHUB_ACTION_PATH}/generate-matrix.sh"
+      run: |
+        "${GITHUB_ACTION_PATH}/generate-matrix.sh"
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
