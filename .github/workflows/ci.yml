@@ -13,3 +13,16 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - uses: ./
+
+      - run: cargo init --bin .
+
+      - uses: ./
+        env:
+          CARGO_BUILD_TARGET: arm-unknown-linux-gnueabihf
+
+      - run: |
+          mkdir .cargo
+          echo '[build]' >> .cargo/config.toml
+          echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
+
+      - uses: ./
