@@ -18,7 +18,7 @@ jobs:
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable  
       - name: Generate build matrix
-        uses: ./.github/actions/rust-build-matrix
+        uses: reitermarkus/rust-build-matrix@main
         id: generate-matrix
   build:
     runs-on: ${{ matrix.os }}
