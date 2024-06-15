@@ -8,6 +8,11 @@ if ! targets="$(cargo +nightly -Z unstable-options config get build.target --for
   targets='["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "aarch64-apple-darwin"]'
 fi
 
+# Ensure a single target is an array.
+if [[ "${targets}" = \"*\" ]]; then
+  targets="[${targets}]"
+fi
+
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
 matrix="$(
