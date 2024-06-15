@@ -2,7 +2,7 @@ name: Rust Build Matrix
 description: Generate a Rust Build Matrix.
 author: reitermarkus
 branding:
-  icon: list
+  icon: grid
   color: green
 
 outputs:
