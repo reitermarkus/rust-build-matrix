@@ -35,8 +35,6 @@ jobs:
           - name: env
             setup: |
               echo 'CARGO_BUILD_TARGET=arm-unknown-linux-gnueabihf' >> "${GITHUB_ENV}"
-            env:
-              CARGO_BUILD_TARGET: arm-unknown-linux-gnueabihf
             expected-matrix: |
               [
                 {
