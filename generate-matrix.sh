@@ -15,16 +15,22 @@ fi
 
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
+if ! feature_matrix="$(cargo metadata --no-deps --format-version 1 | jq '.packages[0].metadata["feature-matrix"] // [[]]')"; then
+  feature_matrix='[[]]'
+fi
+
 matrix="$(
   jq -c \
     --arg toolchain "${toolchain}" \
+    --argjson feature_matrix "${feature_matrix}" \
     'map(
       {
         "os": (if (. | test(".*darwin.*")) then "macos-latest" else "ubuntu-latest" end),
         "toolchain": $toolchain,
         "target": .,
       } | .["use-cross"] = (.os == "ubuntu-latest")
-    )' <<< "${targets}"
+    ) as $matrix |
+    $feature_matrix | map(. as $features | $matrix | map(.features = $features) | .[])' <<< "${targets}"
 )"
 
 jq -C <<< "${matrix}"
