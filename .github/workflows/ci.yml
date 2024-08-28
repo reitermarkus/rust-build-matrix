@@ -17,19 +17,22 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "x86_64-unknown-linux-gnu",
-                  "use-cross": true
+                  "use-cross": true,
+                  "features": []
                 },
                 {
                   "os": "macos-latest",
                   "toolchain": "stable",
                   "target": "x86_64-apple-darwin",
-                  "use-cross": false
+                  "use-cross": false,
+                  "features": []
                 },
                 {
                   "os": "macos-latest",
                   "toolchain": "stable",
                   "target": "aarch64-apple-darwin",
-                  "use-cross": false
+                  "use-cross": false,
+                  "features": []
                 }
               ]
           - name: env
@@ -41,7 +44,8 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "arm-unknown-linux-gnueabihf",
-                  "use-cross": true
+                  "use-cross": true,
+                  "features": []
                 }
               ]
           - name: config
@@ -55,7 +59,8 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "arm-unknown-linux-gnueabihf",
-                  "use-cross": true
+                  "use-cross": true,
+                  "features": []
                 }
               ]
 
