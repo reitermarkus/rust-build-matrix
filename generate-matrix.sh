@@ -25,7 +25,7 @@ matrix="$(
     --argjson feature_matrix "${feature_matrix}" \
     'map(
       {
-        "os": (if (. | test(".*darwin.*")) then "macos-latest" else "ubuntu-latest" end),
+        "os": (if (. | test(".*darwin.*")) then "macos-latest" else (if (. | test(".*windows.*")) then "windows-latest" else "ubuntu-latest" end) end),
         "toolchain": $toolchain,
         "target": .,
       } | .["use-cross"] = (.os == "ubuntu-latest")
