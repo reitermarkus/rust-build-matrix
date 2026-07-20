@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish and Tag Action
-        uses: raven-actions/publish-and-tag@v3
+        uses: raven-actions/publish-and-tag@v2
