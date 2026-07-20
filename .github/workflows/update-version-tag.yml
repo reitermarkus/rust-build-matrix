@@ -5,7 +5,7 @@ on:
     types: [published, edited]
 
 jobs:
-  actions-tagger:
+  tag:
     runs-on: ubuntu-latest
     steps:
       - name: Publish and Tag Action
