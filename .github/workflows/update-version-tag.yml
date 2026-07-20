@@ -1,11 +1,15 @@
 name: Update version tag
 
 on:
-  release:
-    types: [published, edited]
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
 
 jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: nowactions/update-majorver@v1
+      - uses: stairwaytowonderland/normalize-majorver@v1
