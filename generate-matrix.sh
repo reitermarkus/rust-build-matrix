@@ -15,7 +15,7 @@ fi
 
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
-if ! feature_matrix="$(cargo metadata --no-deps --format-version 1 | jq '.packages[0].metadata["feature-matrix"] // [[]]')"; then
+if ! feature_matrix="$(cargo metadata --no-deps --format-version 1 | jq '(.packages | sort_by(.publish == []) | sort_by(.name) | first | .metadata["feature-matrix"]) // [[]]')"; then
   feature_matrix='[[]]'
 fi
 
