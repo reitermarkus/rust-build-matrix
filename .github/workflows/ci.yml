@@ -63,6 +63,21 @@ jobs:
                   "features": []
                 }
               ]
+          - name: windows
+            setup: |
+              mkdir .cargo
+              echo '[build]' >> .cargo/config.toml
+              echo 'target = "x86_64-pc-windows-msvc"' >> .cargo/config.toml
+            expected-matrix: |
+              [
+                {
+                  "os": "windows-latest",
+                  "toolchain": "stable",
+                  "target": "x86_64-pc-windows-msvc",
+                  "use-cross": false,
+                  "features": []
+                }
+              ]
 
     steps:
       - name: Check out repository
