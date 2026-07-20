@@ -1,0 +1,12 @@
+name: Update version tag
+
+on:
+  release:
+    types: [published, edited]
+
+jobs:
+  actions-tagger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish and Tag Action
+        uses: raven-actions/publish-and-tag@v3
