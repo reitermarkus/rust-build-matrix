@@ -17,22 +17,22 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "x86_64-unknown-linux-gnu",
-                  "use-cross": true,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": true
                 },
                 {
                   "os": "macos-latest",
                   "toolchain": "stable",
                   "target": "x86_64-apple-darwin",
-                  "use-cross": false,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": false
                 },
                 {
                   "os": "macos-latest",
                   "toolchain": "stable",
                   "target": "aarch64-apple-darwin",
-                  "use-cross": false,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": false
                 }
               ]
           - name: env
@@ -44,8 +44,8 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "arm-unknown-linux-gnueabihf",
-                  "use-cross": true,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": true
                 }
               ]
           - name: config
@@ -59,8 +59,8 @@ jobs:
                   "os": "ubuntu-latest",
                   "toolchain": "stable",
                   "target": "arm-unknown-linux-gnueabihf",
-                  "use-cross": true,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": true
                 }
               ]
           - name: windows
@@ -74,8 +74,8 @@ jobs:
                   "os": "windows-latest",
                   "toolchain": "stable",
                   "target": "x86_64-pc-windows-msvc",
-                  "use-cross": false,
-                  "features": []
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": false
                 }
               ]
 
