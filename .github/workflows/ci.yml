@@ -18,7 +18,7 @@ jobs:
                   "toolchain": "stable",
                   "target": "x86_64-unknown-linux-gnu",
                   "use-cargo-feature-combinations": false,
-                  "use-cross": true
+                  "use-cross": false
                 },
                 {
                   "os": "macos-latest",
