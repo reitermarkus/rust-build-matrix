@@ -15,22 +15,23 @@ fi
 
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
-if ! feature_matrix="$(cargo metadata --no-deps --format-version 1 | jq '(.packages | sort_by(.publish == []) | sort_by(.name) | first | .metadata["feature-matrix"]) // [[]]')"; then
-  feature_matrix='[[]]'
-fi
+package_metadata="$(cargo metadata --no-deps --format-version 1)"
+package_name="$(jq -r '(.packages | sort_by(.publish == []) | sort_by(.name) | first | .name)' <<< "${package_metadata}")"
+has_cargo_feature_combinations="$(jq -r --arg package_name $package_name '.packages[] | select(.name == $package_name) | .metadata | (has("cargo-fc") or has("fc") or has("cargo-feature-combinations") or has("feature-combinations"))' <<< "${package_metadata}")"
 
 matrix="$(
   jq -c \
     --arg toolchain "${toolchain}" \
-    --argjson feature_matrix "${feature_matrix}" \
-    'map(
+    --argjson has_cargo_feature_combinations "${has_cargo_feature_combinations}" \
+    '. | map(
       {
         "os": (if (. | test(".*darwin.*")) then "macos-latest" elif (. | test(".*windows.*")) then "windows-latest" else "ubuntu-latest" end),
         "toolchain": $toolchain,
         "target": .,
-      } | .["use-cross"] = (.os == "ubuntu-latest")
-    ) as $matrix |
-    $feature_matrix | map(. as $features | $matrix | map(.features = $features) | .[])' <<< "${targets}"
+        "use-cargo-feature-combinations": $has_cargo_feature_combinations,
+      } |
+      .["use-cross"] = (.os == "ubuntu-latest")
+    )' <<< "${targets}"
 )"
 
 jq -C <<< "${matrix}"
