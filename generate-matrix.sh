@@ -30,7 +30,7 @@ matrix="$(
         "target": .,
         "use-cargo-feature-combinations": $has_cargo_feature_combinations,
       } |
-      .["use-cross"] = (.os == "ubuntu-latest")
+      .["use-cross"] = (.os == "ubuntu-latest" and .target != "x86_64-unknown-linux-gnu")
     )' <<< "${targets}"
 )"
 
