@@ -13,11 +13,9 @@ if [[ "${targets}" = \"*\" ]]; then
   targets="[${targets}]"
 fi
 
-env | sort
-
 # Input overrides `.cargo/config.toml` and `CARGO_BUILD_TARGET`.
 if [[ -n "${INPUT_BUILD_TARGET-}" ]]; then
-  targets="$(jq -Rs 'split(",") | map(trim)' <<< "${INPUT_BUILD_TARGET-}")"
+  targets="$(jq -Rs '[. | split(",") | .[] | trim]' <<< "${INPUT_BUILD_TARGET-}")"
 fi
 
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
