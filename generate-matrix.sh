@@ -13,6 +13,11 @@ if [[ "${targets}" = \"*\" ]]; then
   targets="[${targets}]"
 fi
 
+# Input overrides `.cargo/config.toml` and `CARGO_BUILD_TARGET`.
+if [[ -n "${INPUT_BUILD_TARGET-}" ]]; then
+  targets="$(printf '%s' "${INPUT_BUILD_TARGET}" | jq -Rs 'split(",")')"
+fi
+
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
 package_metadata="$(cargo metadata --no-deps --format-version 1)"

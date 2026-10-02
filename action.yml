@@ -5,6 +5,12 @@ branding:
   icon: grid
   color: green
 
+inputs:
+  build_target:
+    description: Build target(s)
+    default: ''
+    type: string
+
 outputs:
   matrix:
     description: Build Matrix
@@ -20,3 +26,4 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
+        INPUT_BUILD_TARGET: ${{ inputs.build_target }}
