@@ -11,6 +11,7 @@ jobs:
         include:
           - name: default
             setup: ''
+            build_target_override: ''
             expected-matrix: |
               [
                 {
@@ -38,6 +39,7 @@ jobs:
           - name: env
             setup: |
               echo 'CARGO_BUILD_TARGET=arm-unknown-linux-gnueabihf' >> "${GITHUB_ENV}"
+            build_target_override: ''
             expected-matrix: |
               [
                 {
@@ -53,6 +55,7 @@ jobs:
               mkdir .cargo
               echo '[build]' >> .cargo/config.toml
               echo 'target = "arm-unknown-linux-gnueabihf"' >> .cargo/config.toml
+            build_target_override: ''
             expected-matrix: |
               [
                 {
@@ -68,6 +71,7 @@ jobs:
               mkdir .cargo
               echo '[build]' >> .cargo/config.toml
               echo 'target = "x86_64-pc-windows-msvc"' >> .cargo/config.toml
+            build_target_override: ''
             expected-matrix: |
               [
                 {
@@ -76,6 +80,22 @@ jobs:
                   "target": "x86_64-pc-windows-msvc",
                   "use-cargo-feature-combinations": false,
                   "use-cross": false
+                }
+              ]
+          - name: windows-linux-override
+            setup: |
+              mkdir .cargo
+              echo '[build]' >> .cargo/config.toml
+              echo 'target = "x86_64-pc-windows-msvc"' >> .cargo/config.toml
+            build_target_override: arm-unknown-linux-gnueabihf
+            expected-matrix: |
+              [
+                {
+                  "os": "ubuntu-latest",
+                  "toolchain": "stable",
+                  "target": "arm-unknown-linux-gnueabihf",
+                  "use-cargo-feature-combinations": false,
+                  "use-cross": true
                 }
               ]
 
@@ -95,6 +115,8 @@ jobs:
 
       - uses: ./
         id: generate-matrix
+        with:
+          build_target: ${{ matrix.build_target_override }}
 
       - run: |
           set -euo pipefail
