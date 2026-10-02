@@ -15,9 +15,6 @@ fi
 
 # Input overrides `.cargo/config.toml` and `CARGO_BUILD_TARGET`.
 if [[ -n "${INPUT_BUILD_TARGET-}" ]]; then
-  which jq
-  jq --version
-  echo "INPUT_BUILD_TARGET='${INPUT_BUILD_TARGET}'"
   targets="$(printf '%s' "${INPUT_BUILD_TARGET}" | jq -Rs 'split(",")')"
 fi
 
