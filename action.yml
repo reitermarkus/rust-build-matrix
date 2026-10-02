@@ -26,3 +26,4 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
+        INPUT_BUILD_TARGET: ${{ inputs.build_target }}
