@@ -17,8 +17,8 @@ fi
 if [[ -n "${INPUT_BUILD_TARGET-}" ]]; then
   which jq
   jq --version
-  echo "INPUT_BUILD_TARGET='${INPUT_BUILD_TARGET-}'"
-  targets="$(jq -Rs 'rtrimstr("\n") | split(",")' <<< "${INPUT_BUILD_TARGET-}")"
+  echo "INPUT_BUILD_TARGET='${INPUT_BUILD_TARGET}'"
+  targets="$(printf '%s' "${INPUT_BUILD_TARGET}" | jq -Rs 'split(",")')"
 fi
 
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
