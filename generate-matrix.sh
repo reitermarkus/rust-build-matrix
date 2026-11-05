@@ -21,7 +21,7 @@ fi
 toolchain="$(rustup show active-toolchain | sed -E 's/-x86_64.*//')"
 
 package_metadata="$(cargo metadata --no-deps --format-version 1)"
-package_name="$(jq -r '(.packages | sort_by(.publish == []) | sort_by(.name) | first | .name)' <<< "${package_metadata}")"
+package_name="$(jq -r '(.packages | sort_by(.name) | sort_by(.publish == []) | first | .name)' <<< "${package_metadata}")"
 has_cargo_feature_combinations="$(jq -r --arg package_name $package_name '.packages[] | select(.name == $package_name) | .metadata | (has("cargo-fc") or has("fc") or has("cargo-feature-combinations") or has("feature-combinations"))' <<< "${package_metadata}")"
 
 matrix="$(
