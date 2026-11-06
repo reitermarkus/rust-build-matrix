@@ -12,4 +12,4 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: stairwaytowonderland/normalize-majorver@3561f586677cbcea9c0945555445b0a524c58a40 # v1
+      - uses: stairwaytowonderland/normalize-majorver@a2b6c8440f5387eda1a321b490e45616e91ea3f9 # v1
